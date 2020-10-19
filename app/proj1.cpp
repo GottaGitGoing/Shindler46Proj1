@@ -53,6 +53,8 @@ bool verifySolution(std::string s1, std::string s2, std::string s3, const std::m
 bool puzzleSolver(std::string s1, std::string s2, std::string s3, std::map<char, unsigned> & mapping)
 {
 	std::set<char> perms;
+
+			// **Question**  should the set of unique characters include the result of summation (should BIB be included in the permutations) :
 	std::string concat_strings = s1 + s2 + s3;
 	for (unsigned int i = 0; i<concat_strings.length(); ++i)
 	{
@@ -62,19 +64,17 @@ bool puzzleSolver(std::string s1, std::string s2, std::string s3, std::map<char,
 	unsigned int len_of_set = 0;
 	std::vector<char> Uniques;
 	
+	// creating a vector of unique letters of all 3 strings
 	for (auto it = perms.begin(); it != perms.end(); ++it)
 	{
 		// std::cout << *it << std::endl;
 		len_of_set += 1;
 		Uniques.push_back(*it);
 	}
-	// std::cout << len_of_set << std::endl;
+	const unsigned int size_k = Uniques.size();
 	
-	// for (auto it = Uniques.begin(); it != Uniques.end(); ++it)
-	// {
-	// 	std::cout << *it;
-	// }
-	bool a = PuzzleSolve(len_of_set, "", Uniques,s1,s2,s3);
+			// **Question** Am I supposed to pass in the list/len of lhs of the permutations (EX: POT + PAN = BIB and me passing set of {POTAN} only)
+	bool a = PuzzleSolve(size_k, "", Uniques,s1,s2,s3);
 
 	return a;
 }
@@ -85,39 +85,54 @@ bool PuzzleSolve(unsigned int k, std::string S, std::vector<char> U, std::string
 	auto new_set = U;
 	for (auto it = U.begin(); it != U.end(); ++it)
 	{
-		S += *it;
+		S += *it;  // add the letter from Set to the empty string
 		new_set.erase(std::remove(new_set.begin(), new_set.end(), *it), new_set.end()); // source : https://stackoverflow.com/questions/39912/how-do-i-remove-an-item-from-a-stl-vector-with-a-certain-value
-		
+
+		// std::map<char,unsigned> potential_map;
+		// for (unsigned int i =0; i<S.length();++i)
+		// {
+		// 	// std::cout << S << std::endl;
+		// 	potential_map.insert(std::pair<char,unsigned>(S[i],i));
+		// }
+		// potential_map.insert(std::pair<char,unsigned>(U[0],S.length()));
+
 		if (k == 1)
 		{
 			/* make a  map of character numbers by iterating thru S and giving the value
 			the index i. Then after creating the map, give the proj0 code following:
 					proj0code(S,U,S+U,map_I_created) */
-			std::map<char,unsigned> potential_map;
 			
+			std::map<char,unsigned> potential_map;
 			for (unsigned int i =0; i<S.length();++i)
 			{
 				// std::cout << S << std::endl;
 				potential_map.insert(std::pair<char,unsigned>(S[i],i));
 			}
 			potential_map.insert(std::pair<char,unsigned>(U[0],S.length()));
+			
 			// for (auto elem:potential_map)
 			// {
-			// 	std::cout << elem.first << "  " << elem.second << std::endl;
+			
+			// std::cout << elem.first << "  " << elem.second << std::endl;
+			
 			// }
+
+			
+			// std::cout << S << std::endl;
 			if (verifySolution(s1,s2,s3, potential_map) == true)
 			{
 				std::cout << "Please Please" <<  std::endl;
 				return true;
-
 			}
-
 		}
 		else
 		{
-			
+			// std::cout << S << std::endl;
 			PuzzleSolve(k-1,S,new_set,s1,s2, s3);
 		}
+		char temp = S.back();
+		S.pop_back();
+		new_set.push_back(temp);
 		
 	}
 	return false;
