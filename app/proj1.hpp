@@ -17,7 +17,7 @@
  See the project 1 write-up for a better description. 
  */
 
-std::map<char,unsigned> PuzzleSolve(unsigned int k, std::string S, std::list<char> U, std::vector<char> Uniq_list, std::string s1, std::string s2, std::string s3);
+bool PuzzleSolve(unsigned int k, std::string S, std::list<char> U, std::vector<char> Uniq_list, std::string s1, std::string s2, std::string s3, std::map<char, unsigned> & mapping);
 
 
 bool puzzleSolver(std::string s1, std::string s2, std::string s3, std::map<char, unsigned> & mapping);

@@ -10,7 +10,9 @@
 
 bool verifySolution(std::string s1, std::string s2, std::string s3, const std::map<char, unsigned> & mapping)
 {
-    std::string s1_to_number,s2_to_number, s3_to_number;
+	try
+	{
+	std::string s1_to_number,s2_to_number, s3_to_number;
     for (unsigned int i = 0; i<s1.length();i++)
     {
         s1_to_number += std::to_string(mapping.at(s1[i]));
@@ -45,8 +47,15 @@ bool verifySolution(std::string s1, std::string s2, std::string s3, const std::m
     {
         return true;
     }
+	return false;
+	}
+	catch(const std::exception& e)
+	{
+		return false;
+	}
+	
     
-    return false;
+    
 
 }
 
@@ -65,69 +74,45 @@ bool puzzleSolver(std::string s1, std::string s2, std::string s3, std::map<char,
 		}
 	}
 	
-	// for (auto elem:Uniques)
-	// {
-	// 	std::cout << elem << std::endl;
-	// }
 
 	std::list<char> U;
 
 	for (unsigned int i = 0; i<10; ++i)
 	{
-		char aChar = '0' + i; // source stackOverflow
+		char aChar = '0' + i; // source stackOverflow convert int to char.
 		U.push_back(aChar);
 	}
 	
-	// for (auto elem:U)
-	// {
-	// 	std::cout << elem << " -- " << std::endl;
-	// }
-
 	std::map<char,unsigned> to_check_map;
 	std::string empty_sting;
-	to_check_map = PuzzleSolve(Uniques.size(), empty_sting,U,Uniques,s1,s2,s3);
+	PuzzleSolve(Uniques.size(), empty_sting,U,Uniques,s1,s2,s3, mapping);
 
-	if (to_check_map.size() == 0)
+	if (verifySolution(s1,s2,s3,mapping) == true)
 	{
-		return false;
+		return true;
 	}
-	
-	mapping = to_check_map;
-	return true;
-
-	
+	else
+	{
+		return false; 	
+	}
+		
 }
 
 
-std::map<char,unsigned> PuzzleSolve(unsigned int k, std::string S, std::list<char> U, std::vector<char> Uniq_list, std::string s1, std::string s2, std::string s3)
+bool PuzzleSolve(unsigned int k, std::string S, std::list<char> U, std::vector<char> Uniq_list, std::string s1, std::string s2, std::string s3, std::map<char, unsigned> & mapping)
 {
+	// general idea, Tammasia TxtBook
 	std::list<char> new_set = U;
 	for (auto elem:U)
 	{
-		// if (elem > Uniq_list.size())
-		// {
-		// 	continue;
-		// }
-		// std::cout << "Failing at for loop 1 " << elem  << std::endl;
-		// try
-		// {
-			// S.push_back(Uniq_list.at(elem));
-		// }
-		// catch(const std::exception& e)
-		// {
-		// 	continue;
-		// }
-
-		// std::string e_ = std::to_string(elem);
-		// S.push_back(std::to_string(elem));
+	
 		S.push_back(elem);
-		// std::cout << "Failing at push_back" << std::endl;
+	
 		for (auto it = new_set.begin(); it != new_set.end();)
 		{
-			// std::cout << "Failing at for loop 2" << std::endl;
+	
 			if (*it == elem)
 			{
-				// std::cout << "Failing at erase" << std::endl;
 				it = new_set.erase(it);
 				break;
 			}
@@ -139,132 +124,27 @@ std::map<char,unsigned> PuzzleSolve(unsigned int k, std::string S, std::list<cha
 		}
 		if (k==1)
 		{
-			// std::cout << "Failing at base case" << std::endl;
 			std::map<char,unsigned> correct_map;
 			for (unsigned int s_ind = 0; s_ind<S.size(); ++s_ind)
 			{
 				correct_map.insert(std::pair<char,unsigned>(Uniq_list[s_ind],S.at(s_ind)-48));
 			}
-			// for (unsigned int char_num_ind = 0; char_num_ind<Uniq_list.size(); ++char_num_ind)
-			// {
-			// 	// std::cout << "Failing at base map pop" << std::endl;
-			// 	correct_map.insert(std::pair<char,unsigned>(Uniq_list.at(char_num_ind),char_num_ind));
-			// }
-
-			// for (auto elm:correct_map)
-			// {
-			// 	std::cout << elm.first << " = = " << elm.second << std::endl;
-			// }
 
 			if (verifySolution(s1,s2,s3,correct_map) == true)
-			{
-				std::cout << "correct found" << std::endl;
-				return correct_map;
-				
+			{	
+				mapping = correct_map;
+				return true;
 			}
 		}
 		else
 		{
-			// std::cout << "Failing at recursive call" << std::endl;
-			PuzzleSolve(k-1, S, new_set, Uniq_list, s1,s2,s3);
+			
+			PuzzleSolve(k-1, S, new_set, Uniq_list, s1,s2,s3, mapping);
 		}
 		S.pop_back();
 		new_set.push_back(elem);
-		// std::cout << "Failing at end of for loop" << std::endl;
-	}
-	std::map<char,unsigned> no_result;
-	return no_result;
-	
-}
-
-
-
-// bool puzzleSolver(std::string s1, std::string s2, std::string s3, std::map<char, unsigned> & mapping)
-// {
-// 	std::set<char> perms;
-
-// 			// **Question**  should the set of unique characters include the result of summation (should BIB be included in the permutations) :
-// 	std::string concat_strings = s1 + s2 + s3;
-// 	for (unsigned int i = 0; i<concat_strings.length(); ++i)
-// 	{
-// 		perms.insert(concat_strings[i]);
-// 	}
-
-// 	unsigned int len_of_set = 0;
-// 	std::vector<char> Uniques;
-	
-// 	// creating a vector of unique letters of all 3 strings
-// 	for (auto it = perms.begin(); it != perms.end(); ++it)
-// 	{
-// 		// std::cout << *it << std::endl;
-// 		len_of_set += 1;
-// 		Uniques.push_back(*it);
-// 	}
-// 	const unsigned int size_k = Uniques.size();
-	
-// 			// **Question** Am I supposed to pass in the list/len of lhs of the permutations (EX: POT + PAN = BIB and me passing set of {POTAN} only)
-// 	bool a = PuzzleSolve(size_k, "", Uniques,s1,s2,s3);
-
-// 	return a;
-// }
-
-// bool PuzzleSolve(unsigned int k, std::string S, std::vector<char> U, std::string s1, std::string s2, std::string s3)
-// {
-// 	// k is the length of set U
-// 	auto new_set = U;
-// 	for (auto it = U.begin(); it != U.end(); ++it)
-// 	{
-// 		S += *it;  // add the letter from Set to the empty string
-// 		new_set.erase(std::remove(new_set.begin(), new_set.end(), *it), new_set.end()); // source : https://stackoverflow.com/questions/39912/how-do-i-remove-an-item-from-a-stl-vector-with-a-certain-value
-
-// 		// std::map<char,unsigned> potential_map;
-// 		// for (unsigned int i =0; i<S.length();++i)
-// 		// {
-// 		// 	// std::cout << S << std::endl;
-// 		// 	potential_map.insert(std::pair<char,unsigned>(S[i],i));
-// 		// }
-// 		// potential_map.insert(std::pair<char,unsigned>(U[0],S.length()));
-
-// 		if (k == 1)
-// 		{
-// 			/* make a  map of character numbers by iterating thru S and giving the value
-// 			the index i. Then after creating the map, give the proj0 code following:
-// 					proj0code(S,U,S+U,map_I_created) */
-			
-// 			std::map<char,unsigned> potential_map;
-// 			for (unsigned int i =0; i<S.length();++i)
-// 			{
-// 				// std::cout << S << std::endl;
-// 				potential_map.insert(std::pair<char,unsigned>(S[i],i));
-// 			}
-// 			potential_map.insert(std::pair<char,unsigned>(U[0],S.length()));
-			
-// 			// for (auto elem:potential_map)
-// 			// {
-			
-// 			// std::cout << elem.first << "  " << elem.second << std::endl;
-			
-// 			// }
-
-			
-// 			// std::cout << S << std::endl;
-// 			if (verifySolution(s1,s2,s3, potential_map) == true)
-// 			{
-// 				std::cout << "Please Please" <<  std::endl;
-// 				return true;
-// 			}
-// 		}
-// 		else
-// 		{
-// 			// std::cout << S << std::endl;
-// 			PuzzleSolve(k-1,S,new_set,s1,s2, s3);
-// 		}
-// 		char temp = S.back();
-// 		S.pop_back();
-// 		new_set.push_back(temp);
 		
-// 	}
-// 	return false;
-// }
-
+	}
+	return false;
+}
 
