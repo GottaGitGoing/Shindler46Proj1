@@ -70,13 +70,14 @@ bool puzzleSolver(std::string s1, std::string s2, std::string s3, std::map<char,
 	// 	std::cout << elem << std::endl;
 	// }
 
-	std::list<unsigned> U;
+	std::list<char> U;
 
 	for (unsigned int i = 0; i<10; ++i)
 	{
-		U.push_back(i);
+		char aChar = '0' + i; // source stackOverflow
+		U.push_back(aChar);
 	}
-
+	
 	// for (auto elem:U)
 	// {
 	// 	std::cout << elem << " -- " << std::endl;
@@ -98,9 +99,9 @@ bool puzzleSolver(std::string s1, std::string s2, std::string s3, std::map<char,
 }
 
 
-std::map<char,unsigned> PuzzleSolve(unsigned int k, std::string S, std::list<unsigned> U, std::vector<char> Uniq_list, std::string s1, std::string s2, std::string s3)
+std::map<char,unsigned> PuzzleSolve(unsigned int k, std::string S, std::list<char> U, std::vector<char> Uniq_list, std::string s1, std::string s2, std::string s3)
 {
-	std::list<unsigned> new_set = U;
+	std::list<char> new_set = U;
 	for (auto elem:U)
 	{
 		// if (elem > Uniq_list.size())
@@ -117,9 +118,9 @@ std::map<char,unsigned> PuzzleSolve(unsigned int k, std::string S, std::list<uns
 		// 	continue;
 		// }
 
-		std::string e_ = std::to_string(elem);
-		S.push_back(std::to_string(elem));
-		
+		// std::string e_ = std::to_string(elem);
+		// S.push_back(std::to_string(elem));
+		S.push_back(elem);
 		// std::cout << "Failing at push_back" << std::endl;
 		for (auto it = new_set.begin(); it != new_set.end();)
 		{
@@ -140,16 +141,26 @@ std::map<char,unsigned> PuzzleSolve(unsigned int k, std::string S, std::list<uns
 		{
 			// std::cout << "Failing at base case" << std::endl;
 			std::map<char,unsigned> correct_map;
-			for (unsigned int char_num_ind = 0; char_num_ind<Uniq_list.size(); ++char_num_ind)
+			for (unsigned int s_ind = 0; s_ind<S.size(); ++s_ind)
 			{
-				// std::cout << "Failing at base map pop" << std::endl;
-				correct_map.insert(std::pair<char,unsigned>(Uniq_list.at(char_num_ind),char_num_ind));
+				correct_map.insert(std::pair<char,unsigned>(Uniq_list[s_ind],S.at(s_ind)-48));
 			}
+			// for (unsigned int char_num_ind = 0; char_num_ind<Uniq_list.size(); ++char_num_ind)
+			// {
+			// 	// std::cout << "Failing at base map pop" << std::endl;
+			// 	correct_map.insert(std::pair<char,unsigned>(Uniq_list.at(char_num_ind),char_num_ind));
+			// }
+
+			// for (auto elm:correct_map)
+			// {
+			// 	std::cout << elm.first << " = = " << elm.second << std::endl;
+			// }
 
 			if (verifySolution(s1,s2,s3,correct_map) == true)
 			{
-				
+				std::cout << "correct found" << std::endl;
 				return correct_map;
+				
 			}
 		}
 		else
@@ -163,6 +174,7 @@ std::map<char,unsigned> PuzzleSolve(unsigned int k, std::string S, std::list<uns
 	}
 	std::map<char,unsigned> no_result;
 	return no_result;
+	
 }
 
 
