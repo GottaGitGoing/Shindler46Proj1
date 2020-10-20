@@ -21,6 +21,8 @@ sstream
 -
 set
 -
+list
+-
 
 /home/ics46/projects/proj1/app/proj1.hpp
 map
@@ -30,5 +32,7 @@ string
 vector
 -
 set
+-
+list
 -
 
