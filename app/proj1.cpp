@@ -108,15 +108,17 @@ std::map<char,unsigned> PuzzleSolve(unsigned int k, std::string S, std::list<uns
 		// 	continue;
 		// }
 		// std::cout << "Failing at for loop 1 " << elem  << std::endl;
-		try
-		{
-			S.push_back(Uniq_list.at(elem));
-		}
-		catch(const std::exception& e)
-		{
-			continue;
-		}
-		
+		// try
+		// {
+			// S.push_back(Uniq_list.at(elem));
+		// }
+		// catch(const std::exception& e)
+		// {
+		// 	continue;
+		// }
+
+		std::string e_ = std::to_string(elem);
+		S.push_back(std::to_string(elem));
 		
 		// std::cout << "Failing at push_back" << std::endl;
 		for (auto it = new_set.begin(); it != new_set.end();)
